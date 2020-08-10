@@ -1,0 +1,1 @@
+export const apiAddress = p => get('/inv/ReportBillReceivable/queryAllCompanyCodes');
