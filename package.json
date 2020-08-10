@@ -9,7 +9,6 @@
     "start": "npm run dev",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run e2e",
-
     "build:dev": "cross-env NODE_ENV=develpment env_config=dev node build/build.js",
     "build:prod": "cross-env NODE_ENV=production env_config=prod node build/build.js"
   },
