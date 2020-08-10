@@ -10,7 +10,7 @@
 	<name>deploy</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jar.name>artifact-deploy-js-acmp-ui-1.0.0-release.tar.gz</jar.name>
+		<jar.name>artifact-deploy-js-firstApp-ui-1.0.0-release.tar.gz</jar.name>
 		<jar.home>/araf/tomcats/apache-tomcat-8-cloud-front/webapps/cloud-front/WEB-INF/views</jar.home>
 		<nginx.home>/araf/nginx/html</nginx.home>
 		<tmp.home>/tmp</tmp.home>
@@ -19,7 +19,7 @@
 		<!-- 登录linux用户名密码 -->
 		<test1.server.address>scp://araf:App1adm2@10.1.17.142</test1.server.address>
 
-		<cloud-front.path>acmp-ui</cloud-front.path>
+		<cloud-front.path>firstApp-ui</cloud-front.path>
 
 		<uat.server.address>scp://araf:App1adm2@10.1.17.147</uat.server.address>
 		<!-- 上传的war文件的临时路径 -->
