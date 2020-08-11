@@ -10,24 +10,7 @@
 	<name>deploy</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jar.name>artifact-deploy-js-firstApp-ui-1.0.0-release.tar.gz</jar.name>
-		<jar.home>/araf/tomcats/apache-tomcat-8-cloud-front/webapps/cloud-front/WEB-INF/views</jar.home>
-		<nginx.home>/araf/nginx/html</nginx.home>
-		<tmp.home>/tmp</tmp.home>
-		<!-- 登录linux用户名密码 -->
-		<server.address>scp://araf:App1adm2@10.1.17.141</server.address>
-		<!-- 登录linux用户名密码 -->
-		<test1.server.address>scp://araf:App1adm2@10.1.17.142</test1.server.address>
 
-		<cloud-front.path>firstApp-ui</cloud-front.path>
-
-		<uat.server.address>scp://araf:App1adm2@10.1.17.147</uat.server.address>
-		<!-- 上传的war文件的临时路径 -->
-		<war.temp.path>/tmp/araf</war.temp.path>
-
-		<!-- 登录product linux用户名密码 -->
-		<product.server.address>scp://root:Network123@10.1.5.130</product.server.address>
-		<product2.server.address>scp://appadm:App1adm2@10.1.21.143</product2.server.address>
 	</properties>
 
 	<profiles>
@@ -37,85 +20,7 @@
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
-			<build>
-				<plugins>
-				<plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-				<version>2.5.3</version>
-                <configuration>
-                     <descriptors>
-                        <!-- 描述文件路径 -->
-                        <descriptor>assembly.xml</descriptor>
-                    </descriptors>
-                    <archive>
 
-                    </archive>
-                </configuration>
-                <executions>
-                    <execution>
-                        <!--名字任意 -->
-                        <id>make-assembly</id>
-                        <!-- 绑定到package生命周期阶段上 -->
-                        <phase>install</phase>
-                        <goals>
-                            <!-- 只运行一次 -->
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-					<!-- Deploy Web/Schedule/Execution Subsystem to DEV Environment -->
-					<plugin>
-						<groupId>com.github.goldin</groupId>
-						<artifactId>copy-maven-plugin</artifactId>
-						<version>0.2.5</version>
-						<executions>
-							<execution>
-								<id>deploy-subsystem-archive</id>
-								<phase>install</phase>
-								<goals>
-									<goal>copy</goal>
-								</goals>
-								<configuration>
-									<resources>
-										<resource>
-											<targetPath>${server.address}:${tmp.home}/</targetPath>
-											<file>${project.basedir}/target/${jar.name}</file>
-										</resource>
-									</resources>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>com.github.goldin</groupId>
-						<artifactId>sshexec-maven-plugin</artifactId>
-						<version>0.2.5</version>
-						<executions>
-							<execution>
-								<id>restart-tomcat</id>
-								<phase>install</phase>
-								<goals>
-									<goal>sshexec</goal>
-								</goals>
-								<configuration>
-									<location>${server.address}:${nginx.home}/</location>
-									<commands>
-                  <!--删除 acmp-ui 目录下的文件-->
-									<command>rm -rf ${cloud-front.path}/</command>
-                   <!-- x 解压.tar.gz的文件 /tmp/artifact-deploy-js-acmp-ui-1.0.0-release.tar.gz
-                   这里的压缩文件是dist文件 -->
-									<command>tar -xzvf ${tmp.home}/${jar.name} -C ${tmp.home}/</command>
-                  <!-- 将文件 /tmp/dist/acmp-ui 移到目录 /araf/nginx/html/acmp-ui/-->
-									<command>mv ${tmp.home}/dist/${cloud-front.path} ${nginx.home}/${cloud-front.path}/</command>
-									</commands>
-								</configuration>
-							</execution>
-
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
 		</profile>
 		<!-- Remote Deploy Artifact to ACCA Development Environment -->
 
@@ -123,99 +28,7 @@
 		<profile>
 			<id>productdeploy</id>
 			<!-- Remote Deploy Artifact to ACCA Development Environment -->
-			<build>
-				<plugins>
-				<plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-				<version>2.5.3</version>
-                <configuration>
-                     <descriptors>
-                        <!-- 描述文件路径 -->
-                        <descriptor>assembly.xml</descriptor>
-                    </descriptors>
-                    <archive>
 
-                    </archive>
-                </configuration>
-                <executions>
-                    <execution>
-                        <!--名字任意 -->
-                        <id>make-assembly</id>
-                        <!-- 绑定到package生命周期阶段上 -->
-                        <phase>install</phase>
-                        <goals>
-                            <!-- 只运行一次 -->
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-					<!-- Deploy Web/Schedule/Execution Subsystem to DEV Environment -->
-					<plugin>
-						<groupId>com.github.goldin</groupId>
-						<artifactId>copy-maven-plugin</artifactId>
-						<version>0.2.5</version>
-						<executions>
-							<execution>
-								<id>deploy-subsystem-archive</id>
-								<phase>install</phase>
-								<goals>
-									<goal>copy</goal>
-								</goals>
-								<configuration>
-									<resources>
-										<resource>
-											<targetPath>${product.server.address}:${tmp.home}/</targetPath>
-											<file>${project.basedir}/target/${jar.name}</file>
-										</resource>
-										<resource>
-											<targetPath>${product2.server.address}:${tmp.home}/</targetPath>
-											<file>${project.basedir}/target/${jar.name}</file>
-										</resource>
-									</resources>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>com.github.goldin</groupId>
-						<artifactId>sshexec-maven-plugin</artifactId>
-						<version>0.2.5</version>
-						<executions>
-							<execution>
-								<id>restart-tomcat</id>
-								<phase>install</phase>
-								<goals>
-									<goal>sshexec</goal>
-								</goals>
-								<configuration>
-									<location>${product.server.address}:${jar.home}/</location>
-									<commands>
-									<command>rm -rf ${cloud-front.path}/</command>
-									<command>tar -xzvf ${tmp.home}/${jar.name} -C ${tmp.home}/</command>
-									<command>mv ${tmp.home}/dist/prod ${jar.home}/${cloud-front.path}/</command>
-									</commands>
-								</configuration>
-							</execution>
-							<execution>
-								<id>restart-tomcat2</id>
-								<phase>install</phase>
-								<goals>
-									<goal>sshexec</goal>
-								</goals>
-								<configuration>
-									<location>${product2.server.address}:${jar.home}/</location>
-									<commands>
-									<command>rm -rf ${cloud-front.path}/</command>
-									<command>tar -xzvf ${tmp.home}/${jar.name} -C ${tmp.home}/</command>
-									<command>mv ${tmp.home}/dist/prod.new ${jar.home}/${cloud-front.path}/</command>
-									</commands>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
 		</profile>
 
 
