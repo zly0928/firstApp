@@ -72,6 +72,7 @@ export default {
         .get("/inv/ReportBillReceivable/queryAllCompanyCodes")
         .then(res => {
           this.payList = res.payload;
+          console.log('captial rep');
         })
         .catch(function(error) {
           console.log(error);
